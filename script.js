@@ -1,36 +1,42 @@
+// variáveis
+const screen1 = document.querySelector(".screen1")
+const screen2 = document.querySelector(".screen2")
+const btnTry = document.querySelector("#btnTry")
+const btnReset = document.querySelector("#btnReset")
+let randomNumber = Math.round(Math.random() * 10)
+let xAttempts = 1
 
-const randomNumber = Math.round(Math.random() * 10);
-let tentativas = 1;
+// Eventos
+btnTry.addEventListener('click', handleTryClick)
+btnReset.addEventListener('click', handleResetClick)
+document.addEventListener('keydown', function(e) {
+    if(e.key == 'Enter' && screen1.classList.contains('hide')) {
+        handleResetClick()
+    }
+})
 
-const start = (event) =>{
-  event.preventDefault();
+// funções
+function handleTryClick(event) {
+    event.preventDefault() // nao faca o padrao
 
-  const inputNumber = document.querySelector('#inputNumber');
+    const inputNumber = document.querySelector("#inputNumber")
 
+    if(Number(inputNumber.value) == randomNumber) {
+        toggleScreen()
+        screen2.querySelector("h2").innerText = `acertou em ${xAttempts} tentativas`
+    }
 
-  if( Number(inputNumber.value) == randomNumber){
-      document.querySelector(".screen1").classList.toggle("hide")
-      document.querySelector(".screen2").classList.toggle("hide")
-      document.querySelector(".screen2 h2").innerText = `Acertou em ${tentativas} tentativas`
-  }else{
-      document.querySelector(".screen1 h3").classList.remove("hide")
-      inputNumber.value = '';
-  }
-
-  tentativas++;
+    inputNumber.value = ""
+    xAttempts++
 }
 
-const restart =  () =>{
-
-  location.reload();
-  
+function handleResetClick() {
+    toggleScreen()
+    xAttempts = 1
+    randomNumber = Math.round(Math.random() * 10)
 }
 
-
-//eventos
-
-let btnTry = document.querySelector('#btnTry');
-let btnReload = document.querySelector('#btnReload');
-
-btnTry.addEventListener('click', start);
-btnReload.addEventListener('click', restart);
+function toggleScreen() {
+    screen1.classList.toggle("hide")
+    screen2.classList.toggle("hide")
+}
